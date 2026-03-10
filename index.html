@@ -1,299 +1,357 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YBGmail | Modern E-Posta</title>
+    <title>VOID | HTML, JS, CSS, Python, C#, C++ Kod Tüyoları</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { colors: { brand: '#3b82f6' } } }
+        }
+    </script>
+
     <style>
-        /* CSS Başlangıç */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f2f2f7;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-            color: #1d1d1f;
-        }
-
-        /* Ana Konteynır */
-        .app-container {
-            display: flex;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* 1. Yan Menü (Sidebar) */
-        .sidebar {
-            width: 260px;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            padding: 24px 16px;
-            border-right: 1px solid #d2d2d7;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .logo {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 30px;
-            padding-left: 10px;
-            color: #000;
-        }
-
-        .compose-btn {
-            background: #0071e3;
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.2);
-        }
-
-        .compose-btn:hover {
-            background: #0077ed;
-        }
-
-        .nav-links {
-            list-style: none;
-        }
-
-        .nav-links li {
-            padding: 10px 15px;
-            border-radius: 10px;
-            margin-bottom: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #424245;
-            transition: all 0.2s;
-            font-weight: 500;
-        }
-
-        .nav-links li:hover {
-            background: rgba(0, 0, 0, 0.05);
-        }
-
-        .nav-links li.active {
-            background: rgba(0, 113, 227, 0.1);
-            color: #0071e3;
-        }
-
-        /* 2. Mail Listesi (List Pane) */
-        .mail-list-pane {
-            width: 380px;
-            background: #fff;
-            border-right: 1px solid #d2d2d7;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .list-header {
-            padding: 24px 20px;
-            border-bottom: 1px solid #f2f2f7;
-        }
-
-        .search-box {
-            background: #f2f2f7;
-            border-radius: 10px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-box input {
-            background: transparent;
-            border: none;
-            outline: none;
-            width: 100%;
-            font-size: 14px;
-        }
-
-        .mail-items-container {
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .mail-item {
-            padding: 16px 20px;
-            border-bottom: 1px solid #f2f2f7;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .mail-item:hover {
-            background: #f9f9fb;
-        }
-
-        .mail-item.selected {
-            background: #f0f7ff;
-            border-left: 4px solid #0071e3;
-        }
-
-        .mail-item .sender {
-            font-weight: 600;
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-
-        .mail-item .subject {
-            font-size: 14px;
-            font-weight: 500;
-            color: #1d1d1f;
-            margin-bottom: 4px;
-        }
-
-        .mail-item .preview {
-            font-size: 13px;
-            color: #86868b;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* 3. Mesaj Detayı (Detail Pane) */
-        .mail-detail-pane {
-            flex: 1;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .detail-header {
-            padding: 30px 40px;
-            border-bottom: 1px solid #f2f2f7;
-        }
-
-        .detail-header h2 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .sender-info {
-            display: flex;
-            align-items: center;
-            font-size: 14px;
-            color: #424245;
-        }
-
-        .avatar {
-            width: 36px;
-            height: 36px;
-            background: #e5e5ea;
-            border-radius: 50%;
-            margin-right: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #86868b;
-        }
-
-        .detail-body {
-            padding: 40px;
-            line-height: 1.6;
-            font-size: 16px;
-            color: #333;
-            overflow-y: auto;
-        }
-
-        /* Scrollbar Tasarımı */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #d2d2d7;
-            border-radius: 10px;
-        }
+        body { font-family: 'Inter', sans-serif; transition: background 0.3s; }
+        [data-theme="dark"] { background-color: #050505; color: #f8fafc; }
+        [data-theme="light"] { background-color: #f1f5f9; color: #0f172a; }
+        .glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); }
+        [data-theme="light"] .glass { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0,0,0,0.05); }
+        .code-preview { max-height: 120px; overflow: hidden; position: relative; font-size: 11px; border-radius: 12px; background: #000; padding: 1rem; color: #60a5fa; }
+        .code-preview::after { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; background: linear-gradient(transparent, #000); }
+        .cat-btn.active { background-color: #3b82f6 !important; color: white !important; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
     </style>
 </head>
-<body>
+<body class="custom-scrollbar">
 
-    <div class="app-container">
-        <aside class="sidebar">
-            <div class="logo">YBGmail</div>
-            <button class="compose-btn">+ Yeni İleti</button>
-            <ul class="nav-links">
-                <li class="active">Gelen Kutusu</li>
-                <li>Yıldızlı</li>
-                <li>Gönderilmiş</li>
-                <li>Taslaklar</li>
-                <li>Arşiv</li>
-                <li>Çöp Kutusu</li>
-            </ul>
-        </aside>
-
-        <section class="mail-list-pane">
-            <div class="list-header">
-                <div class="search-box">
-                    <input type="text" placeholder="E-postalarda ara...">
-                </div>
-            </div>
-            <div class="mail-items-container">
-                <div class="mail-item selected">
-                    <div class="sender">YBG13 Yazılım</div>
-                    <div class="subject">Arayüz Güncellemesi Hakkında</div>
-                    <div class="preview">Yeni YBGmail arayüzü yayına girdi, detayları incelemek için...</div>
-                </div>
-                <div class="mail-item">
-                    <div class="sender">Mirza Güneş</div>
-                    <div class="subject">Model Dosyaları</div>
-                    <div class="preview">Robot kolu için hazırladığım 3D modelleri ekte bulabilirsin.</div>
-                </div>
-                <div class="mail-item">
-                    <div class="sender">Çağan Alp</div>
-                    <div class="subject">Kod İncelemesi</div>
-                    <div class="preview">Veritabanı bağlantısındaki optimizasyonları tamamladım.</div>
-                </div>
-                <div class="mail-item">
-                    <div class="sender">GitHub</div>
-                    <div class="subject">Güvenlik Uyarısı</div>
-                    <div class="preview">Hesabınıza yeni bir cihazdan giriş yapıldı.</div>
-                </div>
-            </div>
-        </section>
-
-        <main class="mail-detail-pane">
-            <div class="detail-header">
-                <h2>Arayüz Güncellemesi Hakkında</h2>
-                <div class="sender-info">
-                    <div class="avatar">Y</div>
-                    <div>
-                        <strong>YBG13 Yazılım</strong> <br>
-                        <span>Alıcı: berk@ybgmail.com</span>
-                    </div>
-                </div>
-            </div>
-            <div class="detail-body">
-                <p>Merhaba Yusuf Berk,</p>
-                <br>
-                <p>YBGmail projesinin arayüzünü tek bir dosya altında topladık. Bu tasarımda modern Apple standartlarını kullanarak daha temiz ve odaklanılabilir bir yapı oluşturduk.</p>
-                <br>
-                <p><strong>Neler Yeni?</strong></p>
-                <ul>
-                    <li>Sol menüde blur efekti kullanıldı.</li>
-                    <li>Gelen kutusu için özel bir seçim alanı eklendi.</li>
-                    <li>Tipografi tamamen Apple'ın sistem yazı tiplerine uyarlandı.</li>
-                </ul>
-                <br>
-                <p>İyi çalışmalar dileriz.</p>
-                <br>
-                <p>Saygılarımızla,<br><strong>YBG13™ Team</strong></p>
-            </div>
-        </main>
+    <div class="bg-brand text-white py-2 text-center text-[10px] font-black tracking-[0.3em] uppercase">
+        DEVELOPED BY <a href="https://ybg13.com" target="_blank" class="underline hover:text-black transition">YBG13™ STUDIO</a>
     </div>
 
+    <nav class="sticky top-0 z-50 glass border-b px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-4 cursor-pointer" onclick="location.reload()">
+                <div class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center rotate-3 shadow-lg shadow-brand/20">
+                    <i class="fa-solid fa-code text-white"></i>
+                </div>
+                <div>
+                    <span class="text-2xl font-black tracking-tighter italic block leading-none">VOID</span>
+                    <a href="https://ybg13.com" target="_blank" class="text-[8px] font-bold text-brand uppercase">ybg13.com</a>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-6">
+                <button onclick="toggleTheme()" class="text-xl hover:text-brand transition"><i id="theme-icon" class="fa-solid fa-moon"></i></button>
+                <div id="nav-guest" class="flex items-center space-x-4">
+                    <button onclick="window.openAuth('login')" class="text-sm font-bold opacity-70">Giriş</button>
+                    <button onclick="window.openAuth('register')" class="bg-brand text-white px-6 py-2 rounded-full text-sm font-black">Kayıt Ol</button>
+                </div>
+                <div id="nav-user" class="hidden flex items-center space-x-4">
+                    <button onclick="window.openPublish()" class="bg-brand/10 text-brand px-4 py-2 rounded-lg text-xs font-black">PAYLAŞ</button>
+                    <div id="user-display" class="w-10 h-10 bg-brand text-white rounded-full flex items-center justify-center font-black border-2 border-white/10 uppercase">?</div>
+                    <button onclick="window.logout()" class="text-gray-500 hover:text-red-500"><i class="fa-solid fa-power-off"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="py-16 px-6 text-center">
+        <h1 class="text-5xl md:text-8xl font-black mb-6 tracking-tighter">KOD <span class="text-brand italic">GÜNLÜĞÜ</span></h1>
+        <p class="opacity-40 max-w-lg mx-auto text-sm font-medium">YBG13™ altyapısı ile en güncel yazılım tüyoları ve snippet arşivi.</p>
+        
+        <div class="flex flex-wrap justify-center gap-3 mt-12" id="cat-wrapper">
+            <button onclick="filterCat('all', this)" class="cat-btn active glass px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest">Tümü</button>
+            <button onclick="filterCat('HTML', this)" class="cat-btn glass px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest">HTML</button>
+            <button onclick="filterCat('CSS', this)" class="cat-btn glass px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest">CSS</button>
+            <button onclick="filterCat('JS', this)" class="cat-btn glass px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest">JS</button>
+            <button onclick="filterCat('Python', this)" class="cat-btn glass px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest">Python</button>
+            <button onclick="filterCat('C#', this)" class="cat-btn glass px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest">C#</button>
+            <button onclick="filterCat('C++', this)" class="cat-btn glass px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest">C++</button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="snippets-container"></main>
+
+    <footer class="mt-32 border-t border-white/5 bg-black/20 pt-20 pb-10 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+            <div class="col-span-1 md:col-span-2">
+                <span class="text-3xl font-black italic text-brand">VOID™</span>
+                <p class="mt-4 opacity-40 text-sm max-w-sm">YBG13.com tarafından geliştirilen, açık kaynak kod paylaşım platformu. Yazılımın kalbi burada atıyor.</p>
+                <div class="flex gap-4 mt-6">
+                    <a href="https://ybg13.com" class="w-10 h-10 glass rounded-lg flex items-center justify-center hover:bg-brand transition"><i class="fa-solid fa-globe"></i></a>
+                    <a href="#" class="w-10 h-10 glass rounded-lg flex items-center justify-center hover:bg-brand transition"><i class="fa-brands fa-github"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-black text-xs uppercase text-brand mb-6 tracking-widest">YBG13™ Reklam</h4>
+                <ul class="space-y-4 text-sm opacity-60 font-bold">
+                    <li><a href="https://ybg13.com" class="hover:text-brand">Web Tasarım</a></li>
+                    <li><a href="https://ybg13.com" class="hover:text-brand">SEO Hizmeti</a></li>
+                    <li><a href="https://ybg13.com" class="hover:text-brand">Mobil Uygulama</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-black text-xs uppercase text-brand mb-6 tracking-widest">Kurumsal</h4>
+                <ul class="space-y-4 text-sm opacity-60 font-bold">
+                    <li><button onclick="alert('KVKK Metni Yakında')" class="hover:text-brand">KVKK</button></li>
+                    <li><button onclick="alert('Gizlilik Politikası Yakında')" class="hover:text-brand">Gizlilik</button></li>
+                    <li><a href="mailto:info@ybg13.com" class="hover:text-brand">İletişim</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center border-t border-white/5 pt-10 text-[10px] font-black tracking-[0.4em] opacity-30">
+            © 2026 VOID PROJECT | POWERED BY <a href="https://ybg13.com" class="text-brand">YBG13™</a>
+        </div>
+    </footer>
+
+    <div id="code-modal" class="fixed inset-0 bg-black/95 z-[600] hidden items-center justify-center p-4 backdrop-blur-xl">
+        <div class="bg-[#0a0a0a] w-full max-w-6xl rounded-[2rem] overflow-hidden flex flex-col md:flex-row h-[85vh] border border-white/10 shadow-2xl">
+            <div class="flex-1 p-8 overflow-y-auto custom-scrollbar border-r border-white/5">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 id="modal-title" class="text-2xl font-black uppercase italic">BAŞLIK</h2>
+                    <button onclick="window.copyModalCode()" class="bg-brand/20 text-brand px-4 py-2 rounded-lg text-[10px] font-black">KOPYALA</button>
+                </div>
+                <pre class="rounded-xl !bg-black !p-6 border border-white/5"><code id="modal-code" class="language-javascript"></code></pre>
+                <p id="modal-desc" class="mt-6 text-gray-400 text-sm leading-relaxed"></p>
+                <div class="mt-10 p-6 bg-brand/5 border border-brand/20 rounded-2xl">
+                    <p class="text-[10px] font-black text-brand mb-2 uppercase">YBG13™ ÖNERİSİ</p>
+                    <p class="text-xs opacity-60">Bu kodu profesyonel bir projede kullanmak için <a href="https://ybg13.com" class="underline">YBG13™</a> uzmanlarından destek alabilirsiniz.</p>
+                </div>
+            </div>
+            <div class="w-full md:w-96 bg-black/40 p-8 flex flex-col h-full">
+                <h3 class="font-black text-xs text-brand uppercase mb-6 tracking-widest">Yorumlar</h3>
+                <div id="comment-list" class="flex-1 overflow-y-auto custom-scrollbar space-y-4 mb-6"></div>
+                <div class="space-y-3">
+                    <textarea id="c-text" placeholder="Yorumun nedir?(yorumlar üzerinde çalışıyoruz...)" class="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-xs text-white h-24 resize-none outline-none focus:border-brand transition"></textarea>
+                    <button onclick="window.addComment()" class="w-full py-4 bg-brand text-white rounded-xl font-black text-[10px] uppercase tracking-widest">Gönder</button>
+                </div>
+            </div>
+            <button onclick="window.closeCode()" class="absolute top-8 right-8 text-white/50 hover:text-white text-3xl"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="fixed inset-0 bg-black/90 z-[700] hidden items-center justify-center p-4">
+        <div class="bg-[#111] w-full max-w-md rounded-[2.5rem] p-10 border border-white/10 shadow-2xl">
+            <div class="flex border-b border-white/5 mb-8">
+                <button onclick="window.switchAuth('login')" id="tab-login" class="flex-1 pb-4 font-black border-b-2 border-brand">GİRİŞ</button>
+                <button onclick="window.switchAuth('register')" id="tab-register" class="flex-1 pb-4 font-black opacity-30">KAYIT</button>
+            </div>
+            <form id="auth-form" class="space-y-4">
+                <input type="email" id="a-email" placeholder="E-posta" required class="w-full p-4 rounded-xl bg-white/5 border border-white/10 outline-none text-white focus:border-brand transition">
+                <input type="password" id="a-pass" placeholder="Şifre" required class="w-full p-4 rounded-xl bg-white/5 border border-white/10 outline-none text-white focus:border-brand transition">
+                <button type="submit" id="auth-btn" class="w-full py-5 bg-brand text-white rounded-xl font-black uppercase tracking-widest shadow-lg shadow-brand/20">Devam Et</button>
+            </form>
+            <button onclick="window.closeAuth()" class="w-full mt-6 text-[10px] font-black opacity-20 hover:opacity-100 uppercase transition">Kapat</button>
+        </div>
+    </div>
+
+    <div id="publish-modal" class="fixed inset-0 bg-black/90 z-[600] hidden items-center justify-center p-4">
+        <div class="bg-[#111] w-full max-w-2xl rounded-[2.5rem] p-10 border border-white/10 shadow-2xl">
+            <h2 class="text-2xl font-black mb-8 italic uppercase text-brand">Kod Paylaş</h2>
+            <form id="publish-form" class="space-y-4">
+                <input type="text" id="p-title" placeholder="Başlık" required class="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white outline-none focus:border-brand">
+                <select id="p-lang" class="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white outline-none">
+                    <option value="HTML">HTML</option><option value="CSS">CSS</option><option value="JS">JS</option>
+                    <option value="Python">Python</option><option value="C#">C#</option><option value="C++">C++</option>
+                </select>
+                <textarea id="p-code" placeholder="Kodlar buraya..." required class="w-full h-48 p-4 rounded-xl bg-white/5 border border-white/10 text-white font-mono text-xs focus:border-brand"></textarea>
+                <textarea id="p-desc" placeholder="Kısa açıklama..." class="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white text-xs"></textarea>
+                <button type="submit" class="w-full py-5 bg-brand text-white rounded-xl font-black uppercase shadow-lg shadow-brand/20">Yayınla</button>
+            </form>
+            <button onclick="window.closePublish()" class="w-full mt-6 text-[10px] font-black opacity-20 uppercase">Vazgeç</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAwfEYe0JztVcatqsbI6vUmjizJBaSKpYQ",
+            authDomain: "messi-2704f.firebaseapp.com",
+            projectId: "messi-2704f",
+            storageBucket: "messi-2704f.firebasestorage.app",
+            messagingSenderId: "605613457448",
+            appId: "1:605613457448:web:3940784f4070a4693d751d"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let allSnippets = [];
+        let activeSnippetId = null;
+        let authMode = 'login';
+        const ADMIN_EMAIL = 'yusufberkgenc5758@gmail.com';
+
+        // TEMA
+        window.toggleTheme = () => {
+            const html = document.documentElement;
+            const target = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', target);
+            document.getElementById('theme-icon').className = target === 'dark' ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
+        };
+
+        // AUTH & MODALS
+        window.openAuth = (m) => { window.switchAuth(m); document.getElementById('auth-modal').classList.replace('hidden', 'flex'); };
+        window.closeAuth = () => document.getElementById('auth-modal').classList.replace('flex', 'hidden');
+        window.switchAuth = (m) => {
+            authMode = m;
+            document.getElementById('tab-login').style.opacity = m === 'login' ? '1' : '0.3';
+            document.getElementById('tab-register').style.opacity = m === 'register' ? '1' : '0.3';
+            document.getElementById('auth-btn').innerText = m === 'login' ? 'Giriş Yap' : 'Kayıt Ol';
+        };
+        window.logout = () => signOut(auth);
+        window.openPublish = () => document.getElementById('publish-modal').classList.replace('hidden', 'flex');
+        window.closePublish = () => document.getElementById('publish-modal').classList.replace('hidden', 'flex');
+
+        // VERİLERİ DİNLE
+        onAuthStateChanged(auth, u => {
+            currentUser = u;
+            document.getElementById('nav-guest').classList.toggle('hidden', !!u);
+            document.getElementById('nav-user').classList.toggle('hidden', !u);
+            if(u) document.getElementById('user-display').innerText = u.email.charAt(0).toUpperCase();
+            renderSnippets(allSnippets);
+        });
+
+        onSnapshot(query(collection(db, "snippets"), orderBy("createdAt", "desc")), snap => {
+            allSnippets = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
+            renderSnippets(allSnippets);
+        });
+
+        // KARTLARI ÇİZ
+        const renderSnippets = (list) => {
+            const cont = document.getElementById('snippets-container');
+            cont.innerHTML = "";
+            list.forEach(s => {
+                const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
+                const card = document.createElement('div');
+                card.className = "glass p-8 rounded-[2.5rem] hover:border-brand transition-all group relative";
+                card.innerHTML = `
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-[10px] font-black text-brand bg-brand/10 px-4 py-1.5 rounded-full uppercase tracking-tighter">${s.language}</span>
+                        ${isAdmin ? `<button onclick="window.deleteSnippet('${s.id}')" class="text-red-500 hover:scale-125 transition"><i class="fa-solid fa-trash-can"></i></button>` : ''}
+                    </div>
+                    <h3 class="text-xl font-black mb-4 uppercase italic tracking-tighter group-hover:text-brand transition">${s.title}</h3>
+                    <div class="code-preview font-mono"><code>${escapeHTML(s.code.substring(0, 100))}...</code></div>
+                    <div class="flex justify-between items-center mt-8">
+                        <span class="text-[9px] font-bold opacity-30 uppercase tracking-widest">By ${s.author.split('@')[0]}</span>
+                        <button onclick="window.openCode('${s.id}')" class="bg-brand text-white px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-brand/20">Detaylar</button>
+                    </div>
+                `;
+                cont.appendChild(card);
+            });
+        };
+
+        // YORUMLAR (FIXED)
+        window.addComment = async () => {
+            if(!currentUser) return alert("Önce giriş yapmalısın!");
+            const txt = document.getElementById('c-text').value;
+            if(!txt) return;
+            await addDoc(collection(db, "comments"), { 
+                snippetId: activeSnippetId, 
+                text: txt, 
+                author: currentUser.email, 
+                createdAt: Date.now() 
+            });
+            document.getElementById('c-text').value = "";
+        };
+
+        const loadComments = (sId) => {
+            onSnapshot(query(collection(db, "comments"), where("snippetId", "==", sId), orderBy("createdAt", "desc")), snap => {
+                const list = document.getElementById('comment-list');
+                list.innerHTML = "";
+                snap.forEach(d => {
+                    const c = d.data();
+                    const isAdmin = currentUser && currentUser.email === ADMIN_EMAIL;
+                    list.innerHTML += `
+                        <div class="bg-white/5 p-4 rounded-2xl border border-white/5 relative group">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[9px] font-black text-brand uppercase">${c.author.split('@')[0]}</span>
+                                ${isAdmin ? `<button onclick="window.deleteComment('${d.id}')" class="text-red-500 text-[8px] opacity-0 group-hover:opacity-100"><i class="fa-solid fa-trash"></i></button>` : ''}
+                            </div>
+                            <p class="text-[11px] opacity-80 leading-relaxed text-white">${c.text}</p>
+                        </div>
+                    `;
+                });
+            });
+        };
+
+        // KOD GÖRÜNTÜLEME
+        window.openCode = (id) => {
+            activeSnippetId = id;
+            const s = allSnippets.find(x => x.id === id);
+            document.getElementById('modal-title').innerText = s.title;
+            document.getElementById('modal-desc').innerText = s.description;
+            const codeEl = document.getElementById('modal-code');
+            codeEl.textContent = s.code;
+            document.getElementById('code-modal').classList.replace('hidden', 'flex');
+            Prism.highlightElement(codeEl);
+            loadComments(id);
+        };
+        window.closeCode = () => document.getElementById('code-modal').classList.replace('flex', 'hidden');
+// MODAL KAPATMA FONKSİYONLARI (Vazgeç Butonları İçin)
+window.closeAuth = () => {
+    document.getElementById('auth-modal').classList.replace('flex', 'hidden');
+};
+
+window.closePublish = () => {
+    document.getElementById('publish-modal').classList.replace('flex', 'hidden');
+};
+
+window.closeCode = () => {
+    document.getElementById('code-modal').classList.replace('flex', 'hidden');
+};
+        // ADMIN SİLME
+        window.deleteSnippet = async (id) => { if(confirm("Tüm kodu sileyim mi?")) await deleteDoc(doc(db, "snippets", id)); };
+        window.deleteComment = async (id) => { if(confirm("Bu yorumu sileyim mi?")) await deleteDoc(doc(db, "comments", id)); };
+
+        // FİLTRELEME
+        window.filterCat = (cat, btn) => {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderSnippets(cat === 'all' ? allSnippets : allSnippets.filter(x => x.language === cat));
+        };
+
+        // FORMLAR
+        document.getElementById('auth-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const em = document.getElementById('a-email').value, ps = document.getElementById('a-pass').value;
+            try {
+                if(authMode === 'login') await signInWithEmailAndPassword(auth, em, ps);
+                else await createUserWithEmailAndPassword(auth, em, ps);
+                window.closeAuth();
+            } catch(e) { alert("Sistemsel Hata: " + e.message); }
+        };
+
+        document.getElementById('publish-form').onsubmit = async (e) => {
+            e.preventDefault();
+            await addDoc(collection(db, "snippets"), {
+                title: document.getElementById('p-title').value,
+                language: document.getElementById('p-lang').value,
+                code: document.getElementById('p-code').value,
+                description: document.getElementById('p-desc').value,
+                author: currentUser.email,
+                createdAt: Date.now()
+            });
+            window.closePublish();
+            e.target.reset();
+        };
+
+        function escapeHTML(str) { return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m])); }
+        window.copyModalCode = () => { navigator.clipboard.writeText(document.getElementById('modal-code').textContent); alert("Kod panoya kopyalandı!"); };
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 </body>
 </html>
